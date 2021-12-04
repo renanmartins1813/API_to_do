@@ -1,0 +1,12 @@
+{
+  "name": "to_do",
+  "version": "0.0001",
+  "description": "another student doing a To do list",
+  "main": "index.js",
+  "author": "renanmartins1813",
+  "license": "MIT",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "express": "^4.17.1"
+  }
+}
