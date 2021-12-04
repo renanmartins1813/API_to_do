@@ -7,6 +7,16 @@
     <title>To do list</title>
 </head>
 <body>
-    <p><%= day_ejs %> List</p>
-</body>
+    <h1><%= day_ejs %></h1>
+
+    <ul>
+        <li>first</li>
+        <li>second</li>
+        <li>third</li>
+    </ul>
+    
+    <form action="/" method="post">
+        <input type="text" name="newItem">
+        <button type="submit" name="submitButton">New Item</button>
+    </form>
 </html>
