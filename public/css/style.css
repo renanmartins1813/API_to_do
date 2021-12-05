@@ -88,3 +88,9 @@ input[type='text']{
     color: grey;
     opacity: 1;
 }
+
+footer{
+    color: #fff;
+    color: rgba(0, 0, 0, 0.8);
+    text-align: center;
+}
