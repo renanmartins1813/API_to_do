@@ -11,6 +11,7 @@ app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.static('public'));
 
 let items = ['frist', 'second', 'third'];
+let work_items = [];
 
 app.get('/', (req, res)=>{
     const today = new Date();
@@ -27,10 +28,28 @@ app.get('/', (req, res)=>{
 });
 
 app.post('/', (req, res)=>{
-    const item = req.body.newItem;
-    items.push(item);
     
-    res.redirect('/');
+    const item = req.body.newItem;
+
+    if(req.body.submit_button === 'Work'){
+        work_items.push(item);
+        res.redirect('/work');
+    }
+    else{
+        
+        items.push(item);
+        res.redirect('/');
+    }
+});
+
+app.get('/work', (req, res)=>{
+    res.render('list', {title_ejs: 'Work List', newListItems: work_items});
+});
+
+app.post('/work', (req, res)=>{
+    const new_work = req.body.newItem;
+    work_items.push(new_work);
+    res.redirect('/work');
 });
 
 app.listen(port, ()=>{
