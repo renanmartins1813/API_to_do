@@ -61,17 +61,21 @@ app.get('/', (req, res)=>{
 
 app.post('/', (req, res)=>{
     
-    const item = req.body.newItem;
-
-    if(req.body.submit_button === 'Work'){
-        work_items.push(item);
-        res.redirect('/work');
-    }
-    else{
+    const item_name = req.body.newItem;
+    const item = new Item({
+        name: item_name
+    });
+    item.save();
+    res.redirect('/');
+    // if(req.body.submit_button === 'Work'){
+    //     work_items.push(item);
+    //     res.redirect('/work');
+    // }
+    // else{
         
-        items.push(item);
-        res.redirect('/');
-    }
+    //     items.push(item);
+    //     res.redirect('/');
+    // }
 });
 
 app.get('/work', (req, res)=>{
