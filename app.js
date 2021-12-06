@@ -27,15 +27,15 @@ const item_schema = new mongoose.Schema({
 const Item = mongoose.model('Item', item_schema);
 
 const to_do_01 = new Item({
-    name: `LF for a job`
+    name: `pessoa recrutadora me nota pls`
 });
 
 const to_do_02 = new Item({
-    name: `procuro emprego jr.`
+    name: `preciso de um emprego`
 });
 
 const to_do_03 = new Item({
-    name: `pessoa recrutadora me nota pls`
+    name: `pf pf pf eu faço até café se precisar`
 });
 
 const default_items = [to_do_01, to_do_02, to_do_03];
@@ -76,6 +76,13 @@ app.post('/', (req, res)=>{
     //     items.push(item);
     //     res.redirect('/');
     // }
+});
+
+app.post('/delete', (req, res)=>{
+    const id = req.body.rm_item
+    console.log(id)
+    Item.findByIdAndDelete(id, err => err ? console.log(err) : console.log(`Item with _id: ${id} has been removed`));
+    res.redirect('/');
 });
 
 app.get('/work', (req, res)=>{
