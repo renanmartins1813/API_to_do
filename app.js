@@ -16,7 +16,7 @@ app.use(express.static('public'));
 // const work_items = [];
 
 mongoose.connect('mongodb://martins:root1432@localhost:27018/al_to_doDB?authSource=admin');
-
+ 
 const item_schema = new mongoose.Schema({
     name:{
         type: String,
@@ -39,6 +39,13 @@ const to_do_03 = new Item({
 });
 
 const default_items = [to_do_01, to_do_02, to_do_03];
+
+const list_Schema = new mongoose.Schema({
+    name: String,
+    items: [item_schema]
+});
+
+const List = mongoose.model('List', list_Schema);
 
 app.get('/', (req, res)=>{
     const day = date.getDate();
@@ -67,33 +74,37 @@ app.post('/', (req, res)=>{
     });
     item.save();
     res.redirect('/');
-    // if(req.body.submit_button === 'Work'){
-    //     work_items.push(item);
-    //     res.redirect('/work');
-    // }
-    // else{
-        
-    //     items.push(item);
-    //     res.redirect('/');
-    // }
 });
 
 app.post('/delete', (req, res)=>{
     const id = req.body.rm_item
-    console.log(id)
     Item.findByIdAndDelete(id, err => err ? console.log(err) : console.log(`Item with _id: ${id} has been removed`));
     res.redirect('/');
 });
 
-app.get('/work', (req, res)=>{
-    res.render('list', {title_ejs: 'Work List', newListItems: work_items});
-});
-
-app.post('/work', (req, res)=>{
-    const new_work = req.body.newItem;
-    work_items.push(new_work);
-    res.redirect('/work');
-});
+app.get('/:customListName', (req, res)=>{
+    const list_name = req.params.customListName;
+    console.log(list_name)
+    List.findOne({name: list_name}, (err, fList)=>{
+        if(err){
+            console.log(err);
+        }
+        else if(fList){
+            console.log('else if');
+            res.render('list', {title_ejs: fList.name, newListItems: fList.items});
+        }
+        else{
+            console.log('else')
+            const cList = new List({
+                name: list_name,
+                items: default_items
+            });
+            
+            cList.save();
+            res.redirect('/' + list_name);
+        }
+    });
+})
 
 app.listen(port, ()=>{
     console.log(`Server started on port ${port}`);
