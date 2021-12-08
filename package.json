@@ -6,8 +6,8 @@
   "author": "renanmartins1813",
   "license": "MIT",
   "engines":{
-    "node": 16.13.0,
-    "yarn": 1.22.10
+    "node": "16.13.0",
+    "yarn": "1.22.10"
   },
   "dependencies": {
     "body-parser": "^1.19.0",
