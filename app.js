@@ -3,6 +3,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const ejs = require('ejs');
 const mongoose = require('mongoose');
+const _ = require('lodash');
 const date = require(__dirname + '/date.js')
 const app = express();
 const port = 4040;
@@ -67,34 +68,62 @@ app.get('/', (req, res)=>{
 });
 
 app.post('/', (req, res)=>{
-    
+    const day = date.getDate();
     const item_name = req.body.newItem;
+    const list_name = req.body.submit_button;
+    console.log(list_name)
     const item = new Item({
         name: item_name
     });
-    item.save();
-    res.redirect('/');
+
+    if(list_name == day){
+        item.save();
+        res.redirect('/');
+    }
+    else{
+        List.findOne({name: list_name}, (err, fList)=>{
+            if(err){
+                console.log(err)
+            }
+            else{
+                fList.items.push(item);
+                fList.save();
+                res.redirect('/' + list_name);
+            }
+        })
+    }
 });
 
 app.post('/delete', (req, res)=>{
+    const day = date.getDate();
     const id = req.body.rm_item
-    Item.findByIdAndDelete(id, err => err ? console.log(err) : console.log(`Item with _id: ${id} has been removed`));
-    res.redirect('/');
+    const list_name = req.body.title_ejs
+    console.log(req.body)
+    
+    if(list_name === day){
+        Item.findByIdAndDelete(id, err => err ? console.log(err) : console.log(`Item with _id: ${id} has been removed`));
+        res.redirect('/');
+    }
+    else{
+        List.findOneAndUpdate({name: list_name}, {$pull: {items: {_id: id}}}, (err, fList)=>{
+            err ? console.log(err) : console.log(`Item with _id: ${id} has been removed`);
+            res.redirect('/' + list_name);
+        });
+    }
+    
 });
 
 app.get('/:customListName', (req, res)=>{
-    const list_name = req.params.customListName;
+    const list_name = _.capitalize(req.params.customListName);
     console.log(list_name)
     List.findOne({name: list_name}, (err, fList)=>{
         if(err){
             console.log(err);
         }
         else if(fList){
-            console.log('else if');
             res.render('list', {title_ejs: fList.name, newListItems: fList.items});
         }
         else{
-            console.log('else')
             const cList = new List({
                 name: list_name,
                 items: default_items
