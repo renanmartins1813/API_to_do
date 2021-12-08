@@ -6,7 +6,7 @@ const mongoose = require('mongoose');
 const _ = require('lodash');
 const date = require(__dirname + '/date.js')
 const app = express();
-const port = 4040;
+const port = process.env.PORT || 4040;
 
 app.set('view engine', 'ejs');
 
