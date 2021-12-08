@@ -13,10 +13,7 @@ app.set('view engine', 'ejs');
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.static('public'));
 
-// const items = ['frist', 'second', 'third'];
-// const work_items = [];
-
-mongoose.connect('mongodb://martins:root1432@localhost:27018/al_to_doDB?authSource=admin');
+mongoose.connect('mongodb+srv://brabo:brabo1432@cluster0.krviy.mongodb.net/al_to_doDB');
  
 const item_schema = new mongoose.Schema({
     name:{
@@ -71,7 +68,6 @@ app.post('/', (req, res)=>{
     const day = date.getDate();
     const item_name = req.body.newItem;
     const list_name = req.body.submit_button;
-    console.log(list_name)
     const item = new Item({
         name: item_name
     });
@@ -98,7 +94,6 @@ app.post('/delete', (req, res)=>{
     const day = date.getDate();
     const id = req.body.rm_item
     const list_name = req.body.title_ejs
-    console.log(req.body)
     
     if(list_name === day){
         Item.findByIdAndDelete(id, err => err ? console.log(err) : console.log(`Item with _id: ${id} has been removed`));
@@ -115,7 +110,6 @@ app.post('/delete', (req, res)=>{
 
 app.get('/:customListName', (req, res)=>{
     const list_name = _.capitalize(req.params.customListName);
-    console.log(list_name)
     List.findOne({name: list_name}, (err, fList)=>{
         if(err){
             console.log(err);
