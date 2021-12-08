@@ -14,12 +14,9 @@ app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.static('public'));
 
 mongoose.connect('mongodb+srv://brabo:brabo1432@cluster0.krviy.mongodb.net/al_to_doDB');
- 
+
 const item_schema = new mongoose.Schema({
-    name:{
-        type: String,
-        required: [true, `a name to a new 'item' is required, check your inputs`]
-    }
+    name: String
 });
 
 const Item = mongoose.model('Item', item_schema);
